@@ -23,7 +23,9 @@ import PropTypes from "prop-types";
 class AddMealModal extends Component {
   static propTypes = {
     submitAddMeal: PropTypes.func,
-    mealForm: PropTypes.object
+    mealForm: PropTypes.object,
+    isOpen: PropTypes.bool,
+    toggleModal: PropTypes.func
   };
 
   state = {
@@ -35,6 +37,23 @@ class AddMealModal extends Component {
       errors: null
     }
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.mealForm.submitting && !this.props.mealForm.submitting) {
+      this.props.toggleModal();
+      if (!this.props.mealForm.error) {
+        this.setState({
+          formAddMeal: {
+            type: "snack",
+            calories: "",
+            description: "",
+            time: moment().toISOString(),
+            errors: null
+          }
+        });
+      }
+    }
+  }
 
   onTimeChange = e => {
     const time =

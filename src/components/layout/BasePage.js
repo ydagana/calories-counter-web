@@ -1,9 +1,11 @@
-import React from 'react';
+import React from "react";
+import { ToastContainer } from "react-toastify";
 
-const BasePage = props =>(
+const BasePage = props => (
   <div className="wrapper">
-    { props.children }
+    <ToastContainer autoClose={3000} />
+    {props.children}
   </div>
-)
+);
 
 export default BasePage;

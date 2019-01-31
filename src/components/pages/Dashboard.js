@@ -1,21 +1,44 @@
 import React, { Component } from "react";
-import ContentWrapper from "../layout/ContentWrapper";
-import { Row, Col, Card, CardHeader, CardBody, Table } from "reactstrap";
+import PropTypes from "prop-types";
+import { Row, Col, Card, CardHeader, CardBody } from "reactstrap";
+import { createStructuredSelector } from "reselect";
+import { selectMeals } from "../../selectors/meal.selectors";
+import { connect } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import AddMealModal from "../AddMealModal";
+import ContentWrapper from "../layout/ContentWrapper";
+import MealsTable from "../mealsTable";
+import { fetchMeals } from "../../actionCreators/meal.actions";
 
 class Dashboard extends Component {
+  static propTypes = {
+    meals: PropTypes.object,
+    fetchMeals: PropTypes.func
+  };
+
   state = {
     mealModalState: false
   };
 
+  componentDidMount() {
+    this.props.fetchMeals({});
+  }
+
   toggleAddMealModal = e => {
-    e.preventDefault();
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     this.setState({ mealModalState: !this.state.mealModalState });
   };
 
   render() {
+    const { meals } = this.props;
+
     return (
       <ContentWrapper>
+        <ToastContainer autoClose={3000} />
         <div className="content-heading">
           <div>
             Dashboard
@@ -67,41 +90,10 @@ class Dashboard extends Component {
             <Card className="card-default">
               <CardHeader>My Meals</CardHeader>
               <CardBody>
-                <Table striped responsive>
-                  <thead>
-                    <tr>
-                      <th className="p-0" colSpan="4">
-                        <img className="img-fluid" src="img/meals.jpg" alt="" />
-                      </th>
-                    </tr>
-                    <tr>
-                      <th>Type</th>
-                      <th>Description</th>
-                      <th>Calories</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
-                  </tbody>
-                </Table>
+                <MealsTable
+                  toggleAddMealModal={this.toggleAddMealModal}
+                  meals={meals}
+                />
               </CardBody>
             </Card>
           </Col>
@@ -119,4 +111,17 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+const mapStateToProps = createStructuredSelector({
+  meals: selectMeals()
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchMeals: values => dispatch(fetchMeals(values))
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Dashboard);

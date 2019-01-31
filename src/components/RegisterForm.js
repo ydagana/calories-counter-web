@@ -1,15 +1,22 @@
 import React, { Component } from "react";
-import { CustomInput, Input } from "reactstrap";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Input } from "reactstrap";
 
 import FormValidator from "../services/formValidator";
+import { submitRegister } from "../actionCreators/user.actions";
 
 class RegisterForm extends Component {
+  static propTypes = {
+    submitLogin: PropTypes.func
+  };
+
   state = {
     formRegister: {
+      username: "",
       email: "",
       password: "",
-      password2: "",
-      terms: false
+      password2: ""
     }
   };
 
@@ -21,7 +28,7 @@ class RegisterForm extends Component {
   validateOnChange = event => {
     const input = event.target;
     const form = input.form;
-    const value = input.type === "checkbox" ? input.checked : input.value;
+    const value = input.value;
 
     const result = FormValidator.validate(input);
 
@@ -38,6 +45,8 @@ class RegisterForm extends Component {
   };
 
   onSubmit = e => {
+    e.preventDefault();
+
     const form = e.target;
     const inputs = [...form.elements].filter(i =>
       ["INPUT", "SELECT"].includes(i.nodeName)
@@ -52,9 +61,9 @@ class RegisterForm extends Component {
       }
     });
 
-    console.log(hasError ? "Form has errors. Check!" : "Form Submitted!");
-
-    e.preventDefault();
+    if (!hasError) {
+      this.props.submitRegister(this.state.formRegister);
+    }
   };
 
   /* Simplify error check */
@@ -70,6 +79,31 @@ class RegisterForm extends Component {
   render() {
     return (
       <form className="mb-3" name="formRegister" onSubmit={this.onSubmit}>
+        <div className="form-group">
+          <label className="text-muted" htmlFor="signupInputUsername">
+            Username
+          </label>
+          <div className="input-group with-focus">
+            <Input
+              type="text"
+              name="username"
+              className="border-right-0"
+              placeholder="Enter your username"
+              invalid={this.hasError("formRegister", "username", "required")}
+              onChange={this.validateOnChange}
+              data-validate='["required"]'
+              value={this.state.formRegister.username}
+            />
+            <div className="input-group-append">
+              <span className="input-group-text text-muted bg-transparent border-left-0">
+                <em className="fa fa-user-tie" />
+              </span>
+            </div>
+            {this.hasError("formRegister", "username", "required") && (
+              <span className="invalid-feedback">Field is required</span>
+            )}
+          </div>
+        </div>
         <div className="form-group">
           <label className="text-muted" htmlFor="signupInputEmail1">
             Email address
@@ -109,14 +143,18 @@ class RegisterForm extends Component {
           </label>
           <div className="input-group with-focus">
             <Input
-              type="text"
+              type="password"
               id="id-password"
               name="password"
               className="border-right-0"
               placeholder="Password"
-              invalid={this.hasError("formRegister", "password", "required")}
+              invalid={
+                this.hasError("formRegister", "password", "required") ||
+                this.hasError("formRegister", "password", "len")
+              }
               onChange={this.validateOnChange}
-              data-validate='["required"]'
+              data-validate='["required","len"]'
+              data-param="[6, 50]"
               value={this.state.formRegister.password}
             />
             <div className="input-group-append">
@@ -124,7 +162,9 @@ class RegisterForm extends Component {
                 <em className="fa fa-lock" />
               </span>
             </div>
-            <span className="invalid-feedback">Field is required</span>
+            <span className="invalid-feedback">
+              Password should be between 6 and 50 characters
+            </span>
           </div>
         </div>
         <div className="form-group">
@@ -133,7 +173,7 @@ class RegisterForm extends Component {
           </label>
           <div className="input-group with-focus">
             <Input
-              type="text"
+              type="password"
               name="password2"
               className="border-right-0"
               placeholder="Retype assword"
@@ -153,18 +193,6 @@ class RegisterForm extends Component {
             </span>
           </div>
         </div>
-        <CustomInput
-          type="checkbox"
-          id="terms"
-          name="terms"
-          label="I agree with the terms"
-          invalid={this.hasError("formRegister", "terms", "required")}
-          onChange={this.validateOnChange}
-          data-validate='["required"]'
-          checked={this.state.formRegister.terms}
-        >
-          <span className="invalid-feedback">Field is required</span>
-        </CustomInput>
         <button className="btn btn-block btn-primary mt-3" type="submit">
           Create account
         </button>
@@ -173,4 +201,13 @@ class RegisterForm extends Component {
   }
 }
 
-export default RegisterForm;
+function mapDispatchToProps(dispatch) {
+  return {
+    submitRegister: values => dispatch(submitRegister(values))
+  };
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(RegisterForm);

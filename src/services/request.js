@@ -88,7 +88,7 @@ function checkStatus(response) {
   const redirect = JSON.parse(getItem("redirect_to_login") || true);
   removeItem("redirect_to_login");
 
-  if (response.ok) {
+  if (response.ok || response.json) {
     // response.status >= 200 && response.status < 300
     return response;
   }
@@ -110,5 +110,20 @@ export function serializeParams(obj) {
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
     }
   });
+  return str.join("&");
+}
+
+export function composeQueryString(params) {
+  const str = [];
+  for (const p in params) {
+    if (
+      params.hasOwnProperty(p) &&
+      params[p] !== undefined &&
+      params[p] !== null
+    ) {
+      // we need to pass 0 and empty string
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(params[p]));
+    }
+  }
   return str.join("&");
 }

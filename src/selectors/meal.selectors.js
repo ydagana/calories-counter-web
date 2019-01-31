@@ -8,3 +8,9 @@ export const selectMealForm = () =>
     selectMealsDomain(),
     subState => subState.mealForm
   );
+
+export const selectMeals = () =>
+  createSelector(
+    selectMealsDomain(),
+    subState => subState.meals
+  );

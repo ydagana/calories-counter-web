@@ -5,7 +5,10 @@ import {
   SUBMIT_LOGIN,
   SUBMIT_LOGIN_ERROR,
   SUBMIT_LOGIN_SUCCESS,
-  LOGOUT_REQUEST
+  LOGOUT_REQUEST,
+  SUBMIT_REGISTER,
+  SUBMIT_REGISTER_SUCCESS,
+  SUBMIT_REGISTER_ERROR
 } from "../actions";
 
 export function submitLogin(payload) {
@@ -25,6 +28,27 @@ export function submitLoginSuccess(payload) {
 export function submitLoginError(payload) {
   return {
     type: SUBMIT_LOGIN_ERROR,
+    payload
+  };
+}
+
+export function submitRegister(payload) {
+  return {
+    type: SUBMIT_REGISTER,
+    payload
+  };
+}
+
+export function submitRegisterSuccess(payload) {
+  return {
+    type: SUBMIT_REGISTER_SUCCESS,
+    payload
+  };
+}
+
+export function submitRegisterError(payload) {
+  return {
+    type: SUBMIT_REGISTER_ERROR,
     payload
   };
 }

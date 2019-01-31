@@ -9,6 +9,7 @@ import {
   submitLoginError,
   submitLoginSuccess
 } from "../actionCreators/user.actions";
+import { toast } from "react-toastify";
 
 export function* loginSaga() {
   while (true) {
@@ -43,6 +44,9 @@ export function* authorize(data) {
       method: "POST",
       body: JSON.stringify(data)
     });
+    if (response.error && response.error.message) {
+      throw new Error(response.error.message);
+    }
 
     // store auth token to localstorage
     yield call(setItem, "auth_token", response.id);
@@ -56,7 +60,8 @@ export function* authorize(data) {
     // return the response from the generator task
     return response;
   } catch (err) {
-    // dispatch LOGIN_ERROR action
+    const errorMessage = err.message || "Error! Try again later.";
+    toast(errorMessage, { type: "error" });
     yield put(submitLoginError(err));
   }
 }
