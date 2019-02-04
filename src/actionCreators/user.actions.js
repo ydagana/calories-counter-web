@@ -8,7 +8,19 @@ import {
   LOGOUT_REQUEST,
   SUBMIT_REGISTER,
   SUBMIT_REGISTER_SUCCESS,
-  SUBMIT_REGISTER_ERROR
+  SUBMIT_REGISTER_ERROR,
+  SUBMIT_UPDATE_USER,
+  SUBMIT_UPDATE_USER_SUCCESS,
+  SUBMIT_UPDATE_USER_ERROR,
+  SUBMIT_UPDATE_PASSWORD,
+  SUBMIT_UPDATE_PASSWORD_SUCCESS,
+  SUBMIT_UPDATE_PASSWORD_ERROR,
+  FETCH_USERS,
+  FETCH_USERS_SUCCESS,
+  FETCH_USERS_ERROR,
+  DELETE_USER,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_ERROR
 } from "../actions";
 
 export function submitLogin(payload) {
@@ -53,6 +65,48 @@ export function submitRegisterError(payload) {
   };
 }
 
+export function submitUpdateUser(payload) {
+  return {
+    type: SUBMIT_UPDATE_USER,
+    payload
+  };
+}
+
+export function submitUpdateUserSuccess(payload) {
+  return {
+    type: SUBMIT_UPDATE_USER_SUCCESS,
+    payload
+  };
+}
+
+export function submitUpdateUserError(payload) {
+  return {
+    type: SUBMIT_UPDATE_USER_ERROR,
+    payload
+  };
+}
+
+export function submitUpdatePassword(payload) {
+  return {
+    type: SUBMIT_UPDATE_PASSWORD,
+    payload
+  };
+}
+
+export function submitUpdatePasswordSuccess(payload) {
+  return {
+    type: SUBMIT_UPDATE_PASSWORD_SUCCESS,
+    payload
+  };
+}
+
+export function submitUpdatePasswordError(payload) {
+  return {
+    type: SUBMIT_UPDATE_PASSWORD_ERROR,
+    payload
+  };
+}
+
 export function fetchUserData() {
   return {
     type: FETCH_USER_DATA
@@ -76,5 +130,47 @@ export function fetchUserDataError(payload) {
 export function logoutRequest() {
   return {
     type: LOGOUT_REQUEST
+  };
+}
+
+export function fetchUsers(payload) {
+  return {
+    type: FETCH_USERS,
+    payload
+  };
+}
+
+export function fetchUsersSuccess(payload) {
+  return {
+    type: FETCH_USERS_SUCCESS,
+    payload
+  };
+}
+
+export function fetchUsersError(payload) {
+  return {
+    type: FETCH_USERS_ERROR,
+    payload
+  };
+}
+
+export function deleteUser(payload) {
+  return {
+    type: DELETE_USER,
+    payload
+  };
+}
+
+export function deleteUserSuccess(payload) {
+  return {
+    type: DELETE_USER_SUCCESS,
+    payload
+  };
+}
+
+export function deleteUserError(payload) {
+  return {
+    type: DELETE_USER_ERROR,
+    payload
   };
 }

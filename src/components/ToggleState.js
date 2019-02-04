@@ -20,7 +20,7 @@ class StateTogglerStorage {
     let data = getItem(StateTogglerStorage.STORAGE_KEY_NAME);
     if (data) {
       let index = data.indexOf(classname);
-      if (index !== -1) data.splice(index, 1);
+      if (index !== -1 && data.splice) data.splice(index, 1);
       setItem(StateTogglerStorage.STORAGE_KEY_NAME, data);
     }
   }

@@ -6,14 +6,15 @@ import { Link, withRouter } from "react-router-dom";
 import { Badge } from "reactstrap";
 
 import SidebarRun from "./Sidebar.run";
-import SidebarUserBlock from "./SidebarUserBlock";
 
 import Menu from "../../Menu.js";
 import { logoutRequest } from "../../actionCreators/user.actions";
+import { createStructuredSelector } from "reselect";
+import { selectUserData } from "../../selectors/user.selectors";
 
-const SidebarItem = ({ item, isActive }) => (
+const SidebarItem = ({ item, isActive, onLinkClick }) => (
   <li className={isActive ? "active" : ""}>
-    <Link to={item.path} title={item.name}>
+    <Link to={item.path} title={item.name} onClick={onLinkClick}>
       {item.label && (
         <Badge tag="div" className="float-right" color={item.label.color}>
           {item.label.value}
@@ -27,16 +28,21 @@ const SidebarItem = ({ item, isActive }) => (
 
 class Sidebar extends Component {
   static propTypes = {
-    logoutRequest: PropTypes.func
+    logoutRequest: PropTypes.func,
+    userData: PropTypes.object
   };
 
   componentDidMount() {
-    SidebarRun(this.navigator.bind(this));
+    SidebarRun(this.navigator);
   }
 
-  navigator(route) {
+  onLocationChange = () => {
+    this.forceUpdate();
+  };
+
+  navigator = route => {
     this.props.history.push(route);
-  }
+  };
 
   routeActive(paths) {
     paths = Array.isArray(paths) ? paths : [paths];
@@ -55,14 +61,12 @@ class Sidebar extends Component {
   };
 
   render() {
+    const { userData } = this.props;
     return (
       <aside className="aside-container">
         <div className="aside-inner">
           <nav data-sidebar-anyclick-close="" className="sidebar">
             <ul className="sidebar-nav">
-              <li className="has-user-block">
-                <SidebarUserBlock />
-              </li>
               {Menu.map((item, i) => {
                 switch (this.itemType(item)) {
                   case "heading":
@@ -72,13 +76,25 @@ class Sidebar extends Component {
                       </li>
                     );
                   case "menu":
-                    return (
-                      <SidebarItem
-                        isActive={this.routeActive(item.path)}
-                        item={item}
-                        key={i}
-                      />
-                    );
+                    if (
+                      !item.role ||
+                      (userData &&
+                        userData.role &&
+                        userData.role.length &&
+                        (userData.role[0].name === item.role ||
+                          userData.role[0].name === "admin"))
+                    ) {
+                      return (
+                        <SidebarItem
+                          onLinkClick={this.onLocationChange}
+                          isActive={this.routeActive(item.path)}
+                          item={item}
+                          key={i}
+                        />
+                      );
+                    } else {
+                      return;
+                    }
                   case "logout":
                     return (
                       <li key={i}>
@@ -109,6 +125,9 @@ class Sidebar extends Component {
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  userData: selectUserData()
+});
 function mapDispatchToProps(dispatch) {
   return {
     logoutRequest: values => dispatch(logoutRequest(values))
@@ -116,6 +135,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withRouter(Sidebar));

@@ -16,16 +16,18 @@ import "react-datetime/css/react-datetime.css";
 import "loaders.css/loaders.css";
 
 import FormValidator from "../services/formValidator";
-import { submitAddMeal } from "../actionCreators/meal.actions";
+import { submitAddMeal, submitEditMeal } from "../actionCreators/meal.actions";
 import { selectMealForm } from "../selectors/meal.selectors";
 import PropTypes from "prop-types";
 
-class AddMealModal extends Component {
+class AddEditMealModal extends Component {
   static propTypes = {
     submitAddMeal: PropTypes.func,
     mealForm: PropTypes.object,
     isOpen: PropTypes.bool,
-    toggleModal: PropTypes.func
+    toggleModal: PropTypes.func,
+    isEdit: PropTypes.bool,
+    meal: PropTypes.object
   };
 
   state = {
@@ -42,18 +44,36 @@ class AddMealModal extends Component {
     if (prevProps.mealForm.submitting && !this.props.mealForm.submitting) {
       this.props.toggleModal();
       if (!this.props.mealForm.error) {
-        this.setState({
-          formAddMeal: {
-            type: "snack",
-            calories: "",
-            description: "",
-            time: moment().toISOString(),
-            errors: null
-          }
-        });
+        this.resetFormState();
       }
     }
+    if (this.props.isEdit && this.props.meal && !prevProps.meal) {
+      this.setState({
+        formAddMeal: {
+          type: this.props.meal.type,
+          calories: this.props.meal.calories,
+          description: this.props.meal.description,
+          time: this.props.meal.time,
+          errors: null
+        }
+      });
+    }
+    if (prevProps.isEdit && !this.props.isEdit) {
+      this.resetFormState();
+    }
   }
+
+  resetFormState = () => {
+    this.setState({
+      formAddMeal: {
+        type: "snack",
+        calories: "",
+        description: "",
+        time: moment().toISOString(),
+        errors: null
+      }
+    });
+  };
 
   onTimeChange = e => {
     const time =
@@ -110,17 +130,21 @@ class AddMealModal extends Component {
 
     if (!hasError) {
       const { errors, ...formValues } = this.state[form.name]; // eslint-disable-line
-      this.props.submitAddMeal(formValues);
+      if (this.props.isEdit && this.props.meal.id) {
+        this.props.submitEditMeal({ id: this.props.meal.id, ...formValues });
+      } else {
+        this.props.submitAddMeal(formValues);
+      }
       // fire submit form action, change submit to loading, listen to props to close the modal or show an error
     }
   };
 
   render() {
-    const { isOpen, toggleModal, mealForm } = this.props;
+    const { isOpen, toggleModal, mealForm, isEdit } = this.props;
     return (
       <Modal className="modal-lg" isOpen={isOpen} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>
-          <strong>Add a new meal</strong>
+          <strong>{isEdit ? "Edit Meal" : "Add a New Meal"}</strong>
         </ModalHeader>
         <form
           className="form-horizontal"
@@ -245,11 +269,12 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    submitAddMeal: values => dispatch(submitAddMeal(values))
+    submitAddMeal: values => dispatch(submitAddMeal(values)),
+    submitEditMeal: values => dispatch(submitEditMeal(values))
   };
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddMealModal);
+)(AddEditMealModal);

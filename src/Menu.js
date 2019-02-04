@@ -4,18 +4,24 @@ const Menu = [
     name: "Main Navigation"
   },
   {
-    name: "Meals",
-    icon: "icon-speedometer",
+    name: "Dashboard",
+    icon: "fas fa-utensils",
     path: "/dashboard"
   },
   {
     name: "Profile",
-    icon: "icon-speedometer",
+    icon: "far fa-user",
     path: "/profile"
   },
   {
+    name: "Manage Users",
+    icon: "fas fa-users",
+    path: "/users",
+    role: "manager"
+  },
+  {
     name: "Logout",
-    icon: "icon-speedometer",
+    icon: "fas fa-sign-out-alt",
     action: "logout"
   }
 ];

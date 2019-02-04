@@ -79,26 +79,18 @@ function parseJSON(response) {
  */
 
 function checkStatus(response) {
-  /*
-  Local storage stores strings, hence getItem can return either:
-    --> undefined [(undefined || true) --> true]
-    --> 'false' [('false' || true) --> 'false']
-    --> 'true' [('true' || true) --> 'true']
-*/
-  const redirect = JSON.parse(getItem("redirect_to_login") || true);
-  removeItem("redirect_to_login");
-
-  if (response.ok || response.json) {
-    // response.status >= 200 && response.status < 300
-    return response;
-  }
   if (response.status === 401) {
     removeItem("auth_token");
     removeItem("user_id");
     removeItem("auth_time");
-    if (redirect) {
+    // eslint-disable-next-line
+    if (location.pathname !== "/login" && location.pathname !== "/register") {
       location.href = "/login"; // eslint-disable-line
     }
+  }
+  if (response.ok || response.json) {
+    // response.status >= 200 && response.status < 300
+    return response;
   }
 }
 

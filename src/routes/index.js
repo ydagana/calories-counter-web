@@ -11,6 +11,8 @@ import Login from "../components/pages/Login";
 import Register from "../components/pages/Register";
 import NotFound from "../components/pages/NotFound";
 import Dashboard from "../components/pages/Dashboard";
+import Profile from "../components/pages/Profile";
+import Users from "../components/pages/Users";
 
 const listOfPages = ["/login", "/register", "/notfound"];
 
@@ -52,8 +54,10 @@ const Routes = ({ location }) => {
                   path="/dashboard"
                   component={Dashboard}
                 />
+                <ConditionalRedirectRoute path="/profile" component={Profile} />
+                <ConditionalRedirectRoute path="/users" component={Users} />
                 <Redirect exact from="/" to="/dashboard" />
-                <Redirect to="/notfound" />
+                <Redirect to="/dashboard" />
               </Switch>
             </div>
           </CSSTransition>

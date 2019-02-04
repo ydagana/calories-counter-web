@@ -1,6 +1,30 @@
 #logo {
-  font-size: 30px;
-  color: #f5deb3;
-  text-decoration: none;
-  margin: 0;
+  h1 {
+    font-size: 22px;
+    color: #fff;
+    text-decoration: none;
+    margin: 0;
+  }
+  &:hover {
+    text-decoration: none;
+  }
+  .brand-logo {
+    padding: 10px 0;
+  }
+  i {
+    display: inline-block;
+    margin-right: 1px;
+    font-size: 40px;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+  }
+}
+.bg-dark {
+  .brand-logo-collapsed {
+    display: none;
+  }
+  #logo .brand-logo {
+    padding: 0;
+  }
 }

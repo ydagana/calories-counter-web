@@ -1,0 +1,107 @@
+.action-btns {
+  width: 160px;
+  .btn {
+    width: 60px;
+  }
+}
+.dashboard-top {
+  h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  h3 {
+    color: #000;
+    margin-bottom: 20px;
+    span {
+      color: #adb5bd;
+      font-size: 18px;
+      padding-left: 10px;
+    }
+    i {
+      color: #adb5bd;
+      padding-right: 10px;
+      font-size: 18px;
+    }
+  }
+  .fa-info-circle {
+    color: #000;
+    font-size: 16px;
+  }
+  .add-meal-btn {
+    font-size: 20px;
+    color: #656565;
+    &:hover, &:active, &:focus {
+      text-decoration: none;
+    }
+    i {
+      color: #5d9cec;
+      margin-right: 5px;
+    }
+  }
+  .card-transparent {
+    height: 123px;
+    margin-bottom: 40px;
+    &.card-2 {
+      background: url('/img/bg1.png') bottom 0 left 0 no-repeat;
+      background-size: 50%;
+    }
+    &.card-3 {
+      background: url('/img/bg2.png') bottom 0 left 0 no-repeat;
+      background-size: 50%;
+    }
+    &.card-4 {
+      background: url('/img/bg3.png') bottom 0 left 0 no-repeat;
+      background-size: 50%;
+    }
+  }
+}
+.todays-calories .easypie-chart {
+  position: relative;
+  p {
+    display: block;
+    font-size: 56px;
+    position: absolute;
+    top: 58px;
+    width: 100%;
+    i, span {
+      color: #adb5bd;
+      font-size: 38px;
+    }
+    span {
+      display: block;
+      font-size: 25px;
+      margin-top: -15px;
+    }
+  }
+}
+.card-header {
+  font-size: 25px;
+}
+
+
+.right-side-content {
+  .text-lg {
+    span {
+      color: #adb5bd;
+      font-size: 18px;
+      padding-left: 10px;
+    }
+    i {
+      color: #adb5bd;
+      padding-right: 10px;
+      font-size: 18px;
+    }
+  }
+}
+
+.modal-lg {
+  .rdrDateRangePickerWrapper {
+    border: 1px solid #eee;
+  }
+  .rdrDefinedRangesWrapper {
+    width: 100px;
+    .rdrStaticRanges button span {
+      padding-left: 5px;
+    }
+  }
+}

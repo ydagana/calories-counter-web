@@ -14,3 +14,15 @@ export const selectMeals = () =>
     selectMealsDomain(),
     subState => subState.meals
   );
+
+export const selectDeleteMealState = () =>
+  createSelector(
+    selectMealsDomain(),
+    subState => subState.deletingMeal
+  );
+
+export const selectMealsStats = () =>
+  createSelector(
+    selectMealsDomain(),
+    subState => subState.mealsStats
+  );
